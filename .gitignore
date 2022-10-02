@@ -6,7 +6,10 @@
 /YouTubeNotificator.Tests/obj
 /YouTubeNotificator.XUnit/obj
 /YouTubeNotificator.WebAPI/obj
-/YouTubeNotificator.Tests/bin/Debug/net6.0
-net6.0
+/YouTubeNotificator.Tests/bin
 /*.user
 /YouTubeNotificator.WebAPI/*.user
+/YouTubeNotificator.WebAPI/Deploy/env.cmd
+/.vs/YouTubeNotificator/FileContentIndex
+/.vs/YouTubeNotificator/v17
+/.vs

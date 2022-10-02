@@ -4,8 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-
-    <IsPackable>false</IsPackable>
+	<IsPackable>false</IsPackable>
+	<UserSecretsId>31ddb1bf-2e99-4b40-b4d1-97bd05acfe7c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +19,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YouTubeNotificator.WebAPI\YouTubeNotificator.WebAPI.csproj" />
   </ItemGroup>
 
 </Project>

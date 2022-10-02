@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>31ddb1bf-2e99-4b40-b4d1-97bd05acfe7c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,5 +16,9 @@
     <ProjectReference Include="..\YouTubeNotificator.Domain\YouTubeNotificator.Domain.csproj" />
     <ProjectReference Include="..\YouTubeNotificator.Persistence\YouTubeNotificator.Persistence.csproj" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="call &quot;Deploy\env.cmd&quot;" />
+  </Target>
 
 </Project>
