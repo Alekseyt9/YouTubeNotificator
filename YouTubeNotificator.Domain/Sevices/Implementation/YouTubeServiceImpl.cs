@@ -5,7 +5,7 @@ using Google.Apis.YouTube.v3;
 using YouTubeNotificator.Domain.Entities;
 using YouTubeNotificator.Domain.Sevices;
 
-namespace YouTubeNotificator.WebAPI.Service
+namespace YouTubeNotificator.Domain.Sevices
 {
     public class YouTubeServiceImpl : IYouTubeService
     {

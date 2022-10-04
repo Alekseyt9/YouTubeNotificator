@@ -1,17 +1,40 @@
+using Microsoft.Extensions.Configuration;
+using System.Runtime;
 using Xunit;
 using YouTubeNotificator.Domain.Entities;
 using YouTubeNotificator.Domain.Model;
 using YouTubeNotificator.Domain.Sevices;
-using YouTubeNotificator.WebAPI.Service;
 
 namespace YouTubeNotificator.XUnit
 {
     public class TelegramTests
     {
-        [Fact]
-        public void Test1()
+        IConfiguration Configuration { get; set; }
+
+        public TelegramTests()
         {
-            INotificator telServ = new TelegramNotificator();
+            var builder = new ConfigurationBuilder()
+                .AddUserSecrets<TelegramTests>();
+            Configuration = builder.Build();
+        }
+
+        [Fact]
+        public void TestCreate()
+        {
+            try
+            {
+                INotificator telServ = new TelegramNotificator(Configuration);
+                Assert.True(true);
+            }
+            catch (Exception e)
+            {
+                Assert.True(false, e.Message);
+            }
+        }
+
+        public void TestSend()
+        {
+            INotificator telServ = new TelegramNotificator(Configuration);
 
             var notInfo = new NotificationData();
             var channel = new UserChannel();
@@ -31,7 +54,6 @@ namespace YouTubeNotificator.XUnit
             {
                 Assert.True(false, e.Message);
             }
-            
         }
     }
 }

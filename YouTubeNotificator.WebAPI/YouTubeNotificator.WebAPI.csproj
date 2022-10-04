@@ -17,6 +17,10 @@
     <ProjectReference Include="..\YouTubeNotificator.Persistence\YouTubeNotificator.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Service\" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="call &quot;Deploy\env.cmd&quot;" />
   </Target>

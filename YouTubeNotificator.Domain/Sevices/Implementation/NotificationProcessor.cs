@@ -2,9 +2,9 @@
 using YouTubeNotificator.Domain.Entities;
 using YouTubeNotificator.Domain.Model;
 
-namespace YouTubeNotificator.Domain.Sevices.Implementation
+namespace YouTubeNotificator.Domain.Sevices
 {
-    internal class NotificationProcessor : INotificationProcessor
+    public class NotificationProcessor : INotificationProcessor
     {
         IAppRepository _appRepository;
         IYouTubeService _youTubeService;

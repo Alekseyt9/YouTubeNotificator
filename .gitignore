@@ -13,3 +13,8 @@
 /.vs/YouTubeNotificator/FileContentIndex
 /.vs/YouTubeNotificator/v17
 /.vs
+/YouTubeNotificator.XUnit/bin/Debug/net6.0
+/YouTubeNotificator.Concole/obj
+/YouTubeNotificator.Domain/bin/Debug/net6.0
+/YouTubeNotificator.WebAPI/bin/Debug/net6.0
+/YouTubeNotificator.Persistence/bin/Debug/net6.0

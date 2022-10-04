@@ -2,7 +2,7 @@
 
 namespace YouTubeNotificator.Domain.Sevices
 {
-    internal interface INotificationProcessor
+    public interface INotificationProcessor
     {
         Task Process(Guid userId);
     }
