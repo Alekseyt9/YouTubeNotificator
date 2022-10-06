@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using YouTubeNotificator.Domain;
 using YouTubeNotificator.Domain.Sevices;
-using YouTubeNotificator.WebAPI.Service;
 
 namespace YouTubeNotificator.Concole
 {
@@ -11,26 +13,30 @@ namespace YouTubeNotificator.Concole
         {
             using var host = CreateHostBuilder(args).Build();
 
-            //ExemplifyDisposableScoping(host.Services, "Scope 1");
-            //Console.WriteLine();
-
-            //ExemplifyDisposableScoping(host.Services, "Scope 2");
-            //Console.WriteLine();
+            var bot = host.Services.GetRequiredService<ITelegramBot>();
 
             await host.RunAsync();
+
+            /*
+            var mediator = host.Services.GetRequiredService<IMediator>();
+            mediator.Send();
+            */
         }
 
-        static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureServices((_, services) =>
+        static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            var builder = new ConfigurationBuilder()
+                .AddUserSecrets<Program>();
+            var configuration = builder.Build();
 
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureServices((_, services) =>
                     services
                         .AddTransient<INotificator, TelegramNotificator>()
                         .AddTransient<INotificationProcessor, NotificationProcessor>()
-                        //.AddScoped<ScopedDisposable>()
-                        //.AddSingleton<SingletonDisposable>()
-
+                        .AddSingleton<IConfiguration>(configuration)
+                        .RegisterDomain()
                 );
-
+        }
     }
 }
