@@ -1,30 +1,33 @@
 ﻿
+using Quartz;
 using YouTubeNotificator.Domain.Entities;
 using YouTubeNotificator.Domain.Model;
+using YouTubeNotificator.Domain.Sevices;
 
-namespace YouTubeNotificator.Domain.Sevices
+namespace YouTubeNotificator.Domain.Notification
 {
-    public class NotificationProcessor : INotificationProcessor
+    internal class NotificationJob : IJob
     {
         IAppRepository _appRepository;
         IYouTubeService _youTubeService;
         private INotificator _notificator;
 
-        public NotificationProcessor(
-            IAppRepository appRepository, IYouTubeService youTubeService, 
+        public NotificationJob(
+            IAppRepository appRepository, IYouTubeService youTubeService,
             INotificator notificator)
         {
-            _appRepository = appRepository ?? 
+            _appRepository = appRepository ??
                              throw new ArgumentNullException(nameof(appRepository));
-            _youTubeService = youTubeService ?? 
+            _youTubeService = youTubeService ??
                               throw new ArgumentNullException(nameof(youTubeService));
             _notificator = notificator ??
                            throw new ArgumentNullException(nameof(notificator));
         }
 
-        public async Task Process(Guid userId)
+        public async Task Execute(IJobExecutionContext context)
         {
             var data = new NotificationData();
+            var userId = context.JobDetail.JobDataMap.GetGuidValue("userId");
             var channels = await _appRepository.GetChannels(userId);
 
             foreach (var channel in channels)
@@ -53,7 +56,6 @@ namespace YouTubeNotificator.Domain.Sevices
             }
 
             _appRepository.Commit();
-
         }
 
     }

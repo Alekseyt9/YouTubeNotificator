@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Quartz;
 using YouTubeNotificator.Domain;
 using YouTubeNotificator.Domain.Commands;
 using YouTubeNotificator.Domain.Sevices;
@@ -21,15 +22,20 @@ namespace YouTubeNotificator.Concole
 
         static void Start(IHost host)
         {
-            var bot = host.Services.GetRequiredService<ITelegramBot>();
+            var taskManager = host.Services.GetRequiredService<INotificationTaskManager>();
+            taskManager.Start();
 
+            var bot = host.Services.GetRequiredService<ITelegramBot>();
             bot.ReceiveMessage += (sender, args) =>
             {
                 var factory = host.Services.GetRequiredService<ITelegramCommandFactory>();
                 var parser = host.Services.GetRequiredService<ITelegramCommandParser>();
                 var cmdInfo = parser.Parse(args.Message);
-                if (cmdInfo == null) 
+                if (cmdInfo == null)
+                {
                     return;
+                }
+
                 var cmd = (TelegramCommandBase)factory.Create(cmdInfo);
                 cmd.Context = new TelegramBotContext()
                 {
@@ -50,11 +56,13 @@ namespace YouTubeNotificator.Concole
                 .ConfigureServices((_, services) =>
                     services
                         .AddTransient<INotificator, TelegramNotificator>()
-                        .AddTransient<INotificationProcessor, NotificationProcessor>()
+                        .AddTransient<INotificationTaskManager, NotificationTaskManager>()
                         .AddTransient<ITelegramCommandFactory, TelegramCommandFactory>()
                         .AddTransient<ITelegramCommandParser, TelegramCommandParser>()
                         .AddSingleton<IConfiguration>(configuration)
+                        .AddSingleton<INotificationTaskManager, NotificationTaskManager>()
                         .RegisterDomain()
+                        .AddQuartz()
                 );
         }
     }
