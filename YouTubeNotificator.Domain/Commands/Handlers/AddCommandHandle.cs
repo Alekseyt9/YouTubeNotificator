@@ -7,19 +7,19 @@ namespace YouTubeNotificator.Domain.Commands.Handlers
     /// <summary>
     /// Создает пользователя в базе и записывает ChannelId
     /// </summary>
-    internal class StartCommandHandler : AsyncRequestHandler<StartCommand>
+    internal class AddCommandHandler : AsyncRequestHandler<AddChannelCommand>
     {
         private ITelegramBot _telegramBot;
 
-        public StartCommandHandler(ITelegramBot telegramBot)
+        public AddCommandHandler(ITelegramBot telegramBot)
         {
             _telegramBot = telegramBot ?? throw new ArgumentNullException(nameof(telegramBot));
         }
 
-        protected override Task Handle(StartCommand request, CancellationToken cancellationToken)
+        protected override Task Handle(AddChannelCommand request, CancellationToken cancellationToken)
         {
             _telegramBot.SendMessage(
-                request.Context.TelegramChannelId, "cmd:start");
+                request.Context.TelegramChannelId, $"cmd:add pars:{request.ChannelUrl}");
             return Task.CompletedTask;
         }
     }

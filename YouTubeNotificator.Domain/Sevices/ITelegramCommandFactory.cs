@@ -1,4 +1,6 @@
-﻿namespace YouTubeNotificator.Domain.Sevices
+﻿using YouTubeNotificator.Domain.Model;
+
+namespace YouTubeNotificator.Domain.Sevices
 {
     public interface ITelegramCommandFactory
     {

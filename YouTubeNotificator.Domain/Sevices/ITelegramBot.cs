@@ -7,6 +7,6 @@ namespace YouTubeNotificator.Domain.Sevices
     {
         event EventHandler<TelegramMessageEventArgs> ReceiveMessage;
 
-        void SendMessage(long channelId, string msg);
+        Task SendMessage(long channelId, string msg);
     }
 }

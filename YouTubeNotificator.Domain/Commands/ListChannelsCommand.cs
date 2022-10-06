@@ -5,7 +5,7 @@ using YouTubeNotificator.Domain.Entities;
 
 namespace YouTubeNotificator.Domain.Commands
 {
-    internal class ListChannelsCommand : TelegramCommandBase, IRequest<ICollection<UserChannel>>
+    internal class ListChannelsCommand : TelegramCommandBase, IRequest
     {
 
     }

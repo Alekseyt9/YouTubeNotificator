@@ -3,7 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using YouTubeNotificator.Domain;
+using YouTubeNotificator.Domain.Commands;
 using YouTubeNotificator.Domain.Sevices;
+using YouTubeNotificator.Domain.Sevices.Impl;
+using YouTubeNotificator.Domain.Sevices.Implementation;
 
 namespace YouTubeNotificator.Concole
 {
@@ -12,15 +15,29 @@ namespace YouTubeNotificator.Concole
         static async Task Main(string[] args)
         {
             using var host = CreateHostBuilder(args).Build();
+            Start(host);
+            await host.RunAsync();
+        }
 
+        static void Start(IHost host)
+        {
             var bot = host.Services.GetRequiredService<ITelegramBot>();
 
-            await host.RunAsync();
-
-            /*
-            var mediator = host.Services.GetRequiredService<IMediator>();
-            mediator.Send();
-            */
+            bot.ReceiveMessage += (sender, args) =>
+            {
+                var factory = host.Services.GetRequiredService<ITelegramCommandFactory>();
+                var parser = host.Services.GetRequiredService<ITelegramCommandParser>();
+                var cmdInfo = parser.Parse(args.Message);
+                if (cmdInfo == null) 
+                    return;
+                var cmd = (TelegramCommandBase)factory.Create(cmdInfo);
+                cmd.Context = new TelegramBotContext()
+                {
+                    TelegramChannelId = args.ChannelId
+                };
+                var mediator = host.Services.GetRequiredService<IMediator>();
+                mediator.Send(cmd);
+            };
         }
 
         static IHostBuilder CreateHostBuilder(string[] args)
@@ -34,6 +51,8 @@ namespace YouTubeNotificator.Concole
                     services
                         .AddTransient<INotificator, TelegramNotificator>()
                         .AddTransient<INotificationProcessor, NotificationProcessor>()
+                        .AddTransient<ITelegramCommandFactory, TelegramCommandFactory>()
+                        .AddTransient<ITelegramCommandParser, TelegramCommandParser>()
                         .AddSingleton<IConfiguration>(configuration)
                         .RegisterDomain()
                 );

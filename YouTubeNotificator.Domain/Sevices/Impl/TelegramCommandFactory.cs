@@ -1,5 +1,6 @@
 ﻿
 using YouTubeNotificator.Domain.Commands;
+using YouTubeNotificator.Domain.Model;
 
 namespace YouTubeNotificator.Domain.Sevices.Implementation
 {
@@ -16,10 +17,16 @@ namespace YouTubeNotificator.Domain.Sevices.Implementation
                     return new ListChannelsCommand();
 
                 case TelegramCommandKind.Remove:
-                    return new DelChannelCommand();
+                    return new DelChannelCommand()
+                    {
+                        ChannelUrl = cmdInfo.Params.First()
+                    };
 
                 case TelegramCommandKind.Add:
-                    return new AddChannelCommand();
+                    return new AddChannelCommand()
+                    {
+                        ChannelUrl = cmdInfo.Params.First()
+                    };
                     
                 default: throw new ArgumentException($"Wrong command {cmdInfo.Kind}");
             }

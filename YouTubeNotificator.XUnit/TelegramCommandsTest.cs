@@ -1,6 +1,7 @@
 ﻿
 using Xunit;
 using YouTubeNotificator.Domain.Commands;
+using YouTubeNotificator.Domain.Model;
 using YouTubeNotificator.Domain.Sevices;
 using YouTubeNotificator.Domain.Sevices.Impl;
 using YouTubeNotificator.Domain.Sevices.Implementation;
@@ -12,7 +13,7 @@ namespace YouTubeNotificator.XUnit
         [Fact]
         public void Test1()
         {
-            ITelegramCommandParser parser = new TelegrammCommandParser();
+            ITelegramCommandParser parser = new TelegramCommandParser();
             ITelegramCommandFactory factory = new TelegramCommandFactory();
             var cmdInfo = parser.Parse("/start");
             Assert.Equal(cmdInfo.Kind, TelegramCommandKind.Start);

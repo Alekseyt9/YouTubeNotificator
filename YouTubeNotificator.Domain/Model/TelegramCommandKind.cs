@@ -1,11 +1,11 @@
-﻿
-namespace YouTubeNotificator.Domain.Commands
+﻿namespace YouTubeNotificator.Domain.Model
 {
     public enum TelegramCommandKind
     {
         Start,
         List,
         Add,
-        Remove
+        Remove,
+        NotCommand
     }
 }

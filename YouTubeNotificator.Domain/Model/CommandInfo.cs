@@ -1,8 +1,4 @@
-﻿
-
-using YouTubeNotificator.Domain.Commands;
-
-namespace YouTubeNotificator.Domain.Sevices
+﻿namespace YouTubeNotificator.Domain.Model
 {
     public class CommandInfo
     {

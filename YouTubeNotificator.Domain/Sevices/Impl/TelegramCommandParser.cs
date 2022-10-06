@@ -1,10 +1,8 @@
-﻿
-
-using YouTubeNotificator.Domain.Commands;
+﻿using YouTubeNotificator.Domain.Model;
 
 namespace YouTubeNotificator.Domain.Sevices.Impl
 {
-    public class TelegrammCommandParser : ITelegramCommandParser
+    public class TelegramCommandParser : ITelegramCommandParser
     {
         public CommandInfo Parse(string message)
         {
@@ -18,6 +16,10 @@ namespace YouTubeNotificator.Domain.Sevices.Impl
             {
                 cmd = arr[0];
                 res.Kind = GetCommandKind(cmd);
+                if (res.Kind == TelegramCommandKind.NotCommand)
+                {
+                    return null;
+                }
             }
             else
             {
@@ -43,7 +45,7 @@ namespace YouTubeNotificator.Domain.Sevices.Impl
                 case "/start": return TelegramCommandKind.Start;
                 case "/del": return TelegramCommandKind.Remove;
                 case "/add": return TelegramCommandKind.Add;
-                default: throw new ArgumentException(cmdStr);
+                default: return TelegramCommandKind.NotCommand;
             }
         }
 

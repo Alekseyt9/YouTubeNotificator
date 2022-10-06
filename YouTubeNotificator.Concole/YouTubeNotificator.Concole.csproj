@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\YouTubeNotificator.Domain\YouTubeNotificator.Domain.csproj" />
-    <ProjectReference Include="..\YouTubeNotificator.WebAPI\YouTubeNotificator.WebAPI.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,15 +1,24 @@
 ﻿
 using MediatR;
 using YouTubeNotificator.Domain.Entities;
+using YouTubeNotificator.Domain.Sevices;
 
 namespace YouTubeNotificator.Domain.Commands.Handlers
 {
-    internal class ListChannelsCommandHandler :
-        IRequestHandler<ListChannelsCommand, ICollection<UserChannel>>
+    internal class ListChannelsCommandHandler : AsyncRequestHandler<ListChannelsCommand>
     {
-        public Task<ICollection<UserChannel>> Handle(ListChannelsCommand request, CancellationToken cancellationToken)
+        private ITelegramBot _telegramBot;
+
+        public ListChannelsCommandHandler(ITelegramBot telegramBot)
         {
-            throw new NotImplementedException();
+            _telegramBot = telegramBot ?? throw new ArgumentNullException(nameof(telegramBot));
+        }
+
+        protected override Task Handle(ListChannelsCommand request, CancellationToken cancellationToken)
+        {
+            _telegramBot.SendMessage(
+                request.Context.TelegramChannelId, "cmd:ls");
+            return Task.CompletedTask;
         }
     }
 }

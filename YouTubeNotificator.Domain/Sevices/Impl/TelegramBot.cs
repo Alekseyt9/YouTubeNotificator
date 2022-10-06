@@ -25,10 +25,10 @@ namespace YouTubeNotificator.Domain.Sevices.Impl
                 AllowedUpdates = Array.Empty<UpdateType>()
             };
             _botClient.StartReceiving(
-                updateHandler: HandleUpdateAsync,
-                pollingErrorHandler: HandlePollingErrorAsync,
-                receiverOptions: receiverOptions,
-                cancellationToken: cts.Token
+                HandleUpdateAsync,
+                HandlePollingErrorAsync,
+                receiverOptions,
+                cts.Token
             );
         }
 
@@ -39,10 +39,8 @@ namespace YouTubeNotificator.Domain.Sevices.Impl
 
         async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            // Only process Message updates: https://core.telegram.org/bots/api#message
             if (update.Message is not { } message)
                 return;
-            // Only process text messages
             if (message.Text is not { } messageText)
                 return;
 
@@ -59,9 +57,11 @@ namespace YouTubeNotificator.Domain.Sevices.Impl
         }
 
 
-        public void SendMessage(long channelId, string msg)
+        public async Task SendMessage(long channelId, string msg)
         {
-            throw new NotImplementedException();
+            using var cts = new CancellationTokenSource();
+            var sentMessage = await _botClient.SendTextMessageAsync(
+                channelId, msg, cancellationToken: cts.Token);
         }
 
     }
