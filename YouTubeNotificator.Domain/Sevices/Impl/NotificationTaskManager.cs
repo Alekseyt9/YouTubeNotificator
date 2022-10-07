@@ -7,6 +7,8 @@ namespace YouTubeNotificator.Domain.Sevices
 {
     public class NotificationTaskManager : INotificationTaskManager
     {
+        private const string s_NotificationsGroup = "notifications";
+
         private ISchedulerFactory _schedulerFactory;
         private IAppRepository _appRepository;
         private IScheduler _scheduler;
@@ -16,7 +18,7 @@ namespace YouTubeNotificator.Domain.Sevices
             IAppRepository appRepository)
         {
             _schedulerFactory = schedulerFactory ?? throw new ArgumentNullException(nameof(schedulerFactory));
-            _appRepository = appRepository ?? throw new ArgumentNullException(nameof(appRepository));
+            //_appRepository = appRepository ?? throw new ArgumentNullException(nameof(appRepository));
         }
 
         public async Task Start()
@@ -24,22 +26,24 @@ namespace YouTubeNotificator.Domain.Sevices
             _scheduler = await _schedulerFactory.GetScheduler();
             await _scheduler.Start();
 
+            /*
             var users = await _appRepository.GetUsers();
             foreach (var user in users)
             {
                 await CreateUserTask(user);
             }
+            */
         }
 
         private async Task CreateUserTask(User user)
         {
             var job = JobBuilder.Create<NotificationJob>()
-                .WithIdentity(user.Id.ToString(), "notifications")
+                .WithIdentity(user.Id.ToString(), s_NotificationsGroup)
                 .UsingJobData("userId", user.Id)
                 .Build();
 
             var trigger = TriggerBuilder.Create()
-                .WithIdentity(user.Id.ToString(), "notifications")
+                .WithIdentity(user.Id.ToString(), s_NotificationsGroup)
                 .StartNow()
                 .WithSimpleSchedule(x => x
                     .WithIntervalInSeconds(60 * 60)

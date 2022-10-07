@@ -8,7 +8,7 @@ namespace YouTubeNotificator.Domain.Notification
 {
     internal class NotificationJob : IJob
     {
-        IAppRepository _appRepository;
+        //IAppRepository _appRepository;
         IYouTubeService _youTubeService;
         private INotificator _notificator;
 
@@ -16,8 +16,8 @@ namespace YouTubeNotificator.Domain.Notification
             IAppRepository appRepository, IYouTubeService youTubeService,
             INotificator notificator)
         {
-            _appRepository = appRepository ??
-                             throw new ArgumentNullException(nameof(appRepository));
+           /* _appRepository = appRepository ??
+                             throw new ArgumentNullException(nameof(appRepository)); */
             _youTubeService = youTubeService ??
                               throw new ArgumentNullException(nameof(youTubeService));
             _notificator = notificator ??
@@ -26,6 +26,7 @@ namespace YouTubeNotificator.Domain.Notification
 
         public async Task Execute(IJobExecutionContext context)
         {
+            /*
             var data = new NotificationData();
             var userId = context.JobDetail.JobDataMap.GetGuidValue("userId");
             var channels = await _appRepository.GetChannels(userId);
@@ -56,6 +57,7 @@ namespace YouTubeNotificator.Domain.Notification
             }
 
             _appRepository.Commit();
+            */
         }
 
     }

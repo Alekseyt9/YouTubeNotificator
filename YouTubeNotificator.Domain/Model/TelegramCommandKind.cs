@@ -6,6 +6,7 @@
         List,
         Add,
         Remove,
+        TestN,
         NotCommand
     }
 }

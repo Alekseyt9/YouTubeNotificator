@@ -27,7 +27,10 @@ namespace YouTubeNotificator.Domain.Sevices.Implementation
                     {
                         ChannelUrl = cmdInfo.Params.First()
                     };
-                    
+
+                case TelegramCommandKind.TestN:
+                    return new TestNotificationCommand();
+
                 default: throw new ArgumentException($"Wrong command {cmdInfo.Kind}");
             }
         }

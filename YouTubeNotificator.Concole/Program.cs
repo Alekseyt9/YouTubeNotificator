@@ -22,8 +22,8 @@ namespace YouTubeNotificator.Concole
 
         static void Start(IHost host)
         {
-            var taskManager = host.Services.GetRequiredService<INotificationTaskManager>();
-            taskManager.Start();
+            //var taskManager = host.Services.GetRequiredService<INotificationTaskManager>();
+            //taskManager.Start();
 
             var bot = host.Services.GetRequiredService<ITelegramBot>();
             bot.ReceiveMessage += (sender, args) =>
@@ -62,6 +62,7 @@ namespace YouTubeNotificator.Concole
                         .AddSingleton<IConfiguration>(configuration)
                         .AddSingleton<INotificationTaskManager, NotificationTaskManager>()
                         .RegisterDomain()
+                        .RegisterPersistence()
                         .AddQuartz()
                 );
         }

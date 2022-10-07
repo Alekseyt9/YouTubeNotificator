@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\YouTubeNotificator.Domain\YouTubeNotificator.Domain.csproj" />
+    <ProjectReference Include="..\YouTubeNotificator.Persistence\YouTubeNotificator.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

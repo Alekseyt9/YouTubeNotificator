@@ -61,7 +61,8 @@ namespace YouTubeNotificator.Domain.Sevices.Impl
         {
             using var cts = new CancellationTokenSource();
             var sentMessage = await _botClient.SendTextMessageAsync(
-                channelId, msg, cancellationToken: cts.Token);
+                channelId, msg, cancellationToken: cts.Token, 
+                parseMode: ParseMode.Html, disableWebPagePreview:true);
         }
 
     }
