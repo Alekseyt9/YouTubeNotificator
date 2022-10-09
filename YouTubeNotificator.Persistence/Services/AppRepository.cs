@@ -18,11 +18,31 @@ namespace YouTubeNotificator.Persistence.Services
             return await _dbContext.Users.ToListAsync<User>();
         }
 
+        public async Task<User> GetUserByTelegramId(long id)
+        {
+            return await _dbContext.Users.SingleOrDefaultAsync(u => u.TelegramId == id);
+        }
+
+        public async Task AddUser(User user)
+        {
+            await _dbContext.Users.AddAsync(user);
+        }
+
         public async Task<ICollection<UserChannel>> GetChannels(Guid userId)
         {
             return await _dbContext.Channels
                 .Where(x => x.UserId == userId)
                 .ToListAsync<UserChannel>();
+        }
+
+        public Task<UserChannel> GetChannel(Guid userId, string url)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DelChannel(Guid userId, Guid id)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<ICollection<ChannelVideo>> GetVideos(Guid chanId)
@@ -38,14 +58,25 @@ namespace YouTubeNotificator.Persistence.Services
                 .OrderBy(x => x.Date).LastOrDefaultAsync();
         }
 
-        public async void AddVideo(ChannelVideo vid)
+        public async Task AddChannel(UserChannel chan)
         {
-            await _dbContext.AddAsync(vid, CancellationToken.None);
+            await _dbContext.Channels.AddAsync(chan, CancellationToken.None);
         }
 
-        public async void Commit()
+        public Task<User> GetUserById(Guid userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task AddVideo(ChannelVideo vid)
+        {
+            await _dbContext.Videos.AddAsync(vid, CancellationToken.None);
+        }
+
+        public async Task Commit()
         {
             await _dbContext.SaveChangesAsync(true, CancellationToken.None);
         }
+
     }
 }

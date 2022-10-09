@@ -1,20 +1,21 @@
 ﻿
-using System.Text;
 using MediatR;
 using YouTubeNotificator.Domain.Sevices;
 
 namespace YouTubeNotificator.Domain.Commands.Handlers
 {
     /// <summary>
-    /// Список каналов
+    /// Обработать и уведомить немедленно
     /// </summary>
-    internal class ListChannelsCommandHandler : AsyncRequestHandler<ListChannelsCommand>
+    internal class NotificateImmediateCommandHandler 
+        : AsyncRequestHandler<NotificateImmediateCommand>
     {
+
         private ITelegramBot _telegramBot;
         private IAppRepository _appRepository;
 
-        public ListChannelsCommandHandler(
-            ITelegramBot telegramBot,
+        public NotificateImmediateCommandHandler(
+            ITelegramBot telegramBot, 
             IAppRepository appRepository
             )
         {
@@ -24,10 +25,9 @@ namespace YouTubeNotificator.Domain.Commands.Handlers
                              throw new ArgumentNullException(nameof(appRepository));
         }
 
-        protected override async Task Handle(ListChannelsCommand request, CancellationToken cancellationToken)
+        protected override async Task Handle(NotificateImmediateCommand request, CancellationToken cancellationToken)
         {
-            await _telegramBot.SendMessage(
-                request.Context.TelegramChannelId, "cmd:ls");
+            await _telegramBot.SendMessage(request.Context.TelegramChannelId, "cmd:imm");
 
             var user = await _appRepository.GetUserByTelegramId(request.Context.TelegramChannelId);
             if (user == null)
@@ -36,16 +36,8 @@ namespace YouTubeNotificator.Domain.Commands.Handlers
                 return;
             }
 
-            var channels = await _appRepository.GetChannels(user.Id);
-            var sb = new StringBuilder();
-
-            foreach (var chan in channels)
-            {
-                sb.AppendLine($" • <a href='{chan.YoutubeUrl}'>{chan.YoutubeName}</a>");
-            }
-
-            await _telegramBot.SendMessage(request.Context.TelegramChannelId, sb.ToString());
 
         }
+
     }
 }

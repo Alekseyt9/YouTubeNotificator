@@ -12,6 +12,7 @@ namespace YouTubeNotificator.Domain
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddSingleton<ITelegramBot, TelegramBot>();
+            services.AddTransient<INotificationProcessor, NotificationProcessor>();
             return services;
         }
     }

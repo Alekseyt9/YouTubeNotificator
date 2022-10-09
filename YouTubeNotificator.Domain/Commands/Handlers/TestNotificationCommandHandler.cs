@@ -7,11 +7,16 @@ namespace YouTubeNotificator.Domain.Commands.Handlers
 {
     internal class TestNotificationCommandHandler : AsyncRequestHandler<TestNotificationCommand>
     {
-        private INotificator _notificator;
+        private INotificationFormatter _notificationFormatter;
+        private ITelegramBot _telegramBot;
 
-        public TestNotificationCommandHandler(INotificator notificator)
+        public TestNotificationCommandHandler(
+            INotificationFormatter notificationFormatter, 
+            ITelegramBot telegramBot
+            )
         {
-            _notificator = notificator ?? throw new ArgumentNullException(nameof(notificator));
+            _notificationFormatter = notificationFormatter ?? throw new ArgumentNullException(nameof(notificationFormatter));
+            _telegramBot = telegramBot ?? throw new ArgumentNullException(nameof(telegramBot));
         }
 
         protected override Task Handle(
@@ -47,7 +52,8 @@ namespace YouTubeNotificator.Domain.Commands.Handlers
                 )
             );
 
-            _notificator.SendNotification(data);
+            var msg = _notificationFormatter.FormatMessage(data);
+            _telegramBot.SendMessage(request.Context.TelegramChannelId, msg);
 
             return Task.CompletedTask;
         }

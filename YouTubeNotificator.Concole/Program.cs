@@ -23,18 +23,18 @@ namespace YouTubeNotificator.Concole
                 var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 DBInitializer.Init(ctx);
             }
-            Start(host);
+            await Start(host);
 
             await host.RunAsync();
         }
 
-        static void Start(IHost host)
+        static async Task Start(IHost host)
         {
             var taskManager = host.Services.GetRequiredService<INotificationTaskManager>();
-            taskManager.Start();
+            await taskManager.Start();
 
             var bot = host.Services.GetRequiredService<ITelegramBot>();
-            bot.ReceiveMessage += (sender, args) =>
+            bot.ReceiveMessage += async (sender, args) =>
             {
                 var factory = host.Services.GetRequiredService<ITelegramCommandFactory>();
                 var parser = host.Services.GetRequiredService<ITelegramCommandParser>();
@@ -50,7 +50,7 @@ namespace YouTubeNotificator.Concole
                     TelegramChannelId = args.ChannelId
                 };
                 var mediator = host.Services.GetRequiredService<IMediator>();
-                mediator.Send(cmd);
+                await mediator.Send(cmd);
             };
         }
 
@@ -64,12 +64,13 @@ namespace YouTubeNotificator.Concole
             return Host.CreateDefaultBuilder(args)
                 .ConfigureServices((_, services) =>
                     services
-                        .AddTransient<INotificator, TelegramNotificator>()
+                        .AddTransient<INotificationFormatter, TelegramNotificationFormatter>()
                         .AddTransient<INotificationTaskManager, NotificationTaskManager>()
                         .AddTransient<ITelegramCommandFactory, TelegramCommandFactory>()
                         .AddTransient<ITelegramCommandParser, TelegramCommandParser>()
                         .AddSingleton<IConfiguration>(configuration)
                         .AddSingleton<INotificationTaskManager, NotificationTaskManager>()
+                        .AddSingleton<IYouTubeService, YouTubeServiceImpl>()
                         .RegisterDomain()
                         .RegisterPersistence(configuration)
                         .AddQuartz()

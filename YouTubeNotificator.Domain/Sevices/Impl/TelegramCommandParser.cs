@@ -46,6 +46,7 @@ namespace YouTubeNotificator.Domain.Sevices.Impl
                 case "/del": return TelegramCommandKind.Remove;
                 case "/add": return TelegramCommandKind.Add;
                 case "/testn": return TelegramCommandKind.TestN;
+                case "/imm": return TelegramCommandKind.Immediate;
                 default: return TelegramCommandKind.NotCommand;
             }
         }

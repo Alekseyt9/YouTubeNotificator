@@ -2,26 +2,59 @@
 using System.Net;
 using System.Text.RegularExpressions;
 using Google.Apis.YouTube.v3;
-using YouTubeNotificator.Domain.Entities;
-using YouTubeNotificator.Domain.Sevices;
+using Microsoft.Extensions.Configuration;
+using YouTubeNotificator.Domain.Model;
 
 namespace YouTubeNotificator.Domain.Sevices
 {
     public class YouTubeServiceImpl : IYouTubeService
     {
+        private YouTubeService _service;
 
-        public YouTubeServiceImpl()
+        public YouTubeServiceImpl(IConfiguration conf)
         {
-            var youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            _service = new YouTubeService(new BaseClientService.Initializer()
             {
-                ApiKey = Environment.GetEnvironmentVariable("youtube_ApiKey"),
-                ApplicationName = Environment.GetEnvironmentVariable("youtube_ApplicationName")
+                ApiKey = conf["youtube_ApiKey"],
+                ApplicationName = conf["youtube_ApplicationName"]
             });
         }
 
-        public Task<ICollection<ChannelVideo>> GetChannelVideos(string channelId, DateTime timeFrom)
+        public async Task<ICollection<YouTubeVideoDto>> GetChannelVideos(string channelId, DateTime timeFrom)
         {
-            throw new NotImplementedException();
+            var searchVideosRequest = _service.Search.List(
+                new Google.Apis.Util.Repeatable<string>(
+                    new string[] { "snippet" }
+                ));
+            searchVideosRequest.ChannelId = channelId;
+            searchVideosRequest.MaxResults = 50;
+            searchVideosRequest.PublishedAfter = timeFrom;
+            var response = await searchVideosRequest.ExecuteAsync();
+
+            var res = new List<YouTubeVideoDto>();
+            foreach (var item in response.Items)
+            {
+                res.Add(new YouTubeVideoDto()
+                {
+                    Name = item.Snippet.Title,
+                    Url = item.Id.VideoId,
+                    Date = item.Snippet.PublishedAt
+                });
+            }
+
+            return res;
+        }
+
+        public async Task<string> GetChannelTitle(string channelId)
+        {
+            var request = _service.Channels.List(
+                new Google.Apis.Util.Repeatable<string>(
+                    new string[] { "snippet", "contentDetails" }
+                ));
+
+            request.Id = channelId;
+            var response = await request.ExecuteAsync();
+            return response.Items.First().Snippet.Title;
         }
 
         public async Task<string> GetChannelId(string url)

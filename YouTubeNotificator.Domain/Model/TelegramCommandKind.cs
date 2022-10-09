@@ -7,6 +7,7 @@
         Add,
         Remove,
         TestN,
-        NotCommand
+        NotCommand,
+        Immediate
     }
 }

@@ -2,8 +2,10 @@
 
 namespace YouTubeNotificator.Domain.Sevices
 {
-    public interface INotificator
+    public interface INotificationFormatter
     {
-        void SendNotification(NotificationData data);
+
+        string FormatMessage(NotificationData data);
+
     }
 }

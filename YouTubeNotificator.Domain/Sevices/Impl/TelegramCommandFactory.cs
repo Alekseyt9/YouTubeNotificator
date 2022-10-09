@@ -19,17 +19,20 @@ namespace YouTubeNotificator.Domain.Sevices.Implementation
                 case TelegramCommandKind.Remove:
                     return new DelChannelCommand()
                     {
-                        ChannelUrl = cmdInfo.Params.First()
+                        ChannelUrl = cmdInfo.Params.FirstOrDefault()
                     };
 
                 case TelegramCommandKind.Add:
                     return new AddChannelCommand()
                     {
-                        ChannelUrl = cmdInfo.Params.First()
+                        ChannelUrl = cmdInfo.Params.FirstOrDefault()
                     };
 
                 case TelegramCommandKind.TestN:
                     return new TestNotificationCommand();
+
+                case TelegramCommandKind.Immediate:
+                    return new NotificateImmediateCommand();
 
                 default: throw new ArgumentException($"Wrong command {cmdInfo.Kind}");
             }
