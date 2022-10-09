@@ -13,16 +13,20 @@ namespace YouTubeNotificator.Domain.Commands.Handlers
 
         private ITelegramBot _telegramBot;
         private IAppRepository _appRepository;
+        private INotificationProcessor _notificationProcessor;
 
         public NotificateImmediateCommandHandler(
             ITelegramBot telegramBot, 
-            IAppRepository appRepository
-            )
+            IAppRepository appRepository,
+            INotificationProcessor notificationProcessor
+        )
         {
             _telegramBot = telegramBot ?? 
                            throw new ArgumentNullException(nameof(telegramBot));
             _appRepository = appRepository ??
                              throw new ArgumentNullException(nameof(appRepository));
+            _notificationProcessor = notificationProcessor ??
+                                     throw new ArgumentNullException(nameof(notificationProcessor));
         }
 
         protected override async Task Handle(NotificateImmediateCommand request, CancellationToken cancellationToken)
@@ -36,7 +40,7 @@ namespace YouTubeNotificator.Domain.Commands.Handlers
                 return;
             }
 
-
+            await _notificationProcessor.Process(user.Id);
         }
 
     }

@@ -37,7 +37,7 @@ namespace YouTubeNotificator.Domain.Sevices
                 res.Add(new YouTubeVideoDto()
                 {
                     Name = item.Snippet.Title,
-                    Url = item.Id.VideoId,
+                    Url = "https://www.youtube.com/watch?v=" + item.Id.VideoId,
                     Date = item.Snippet.PublishedAt
                 });
             }

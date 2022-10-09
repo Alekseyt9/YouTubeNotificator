@@ -41,7 +41,7 @@ namespace YouTubeNotificator.Domain.Commands.Handlers
 
             foreach (var chan in channels)
             {
-                sb.AppendLine($" • <a href='{chan.YoutubeUrl}'>{chan.YoutubeName}</a>");
+                sb.AppendLine($"• <a href='{chan.YoutubeUrl}'>{chan.YoutubeName}</a> [{chan.YoutubeUrl}]");
             }
 
             await _telegramBot.SendMessage(request.Context.TelegramChannelId, sb.ToString());

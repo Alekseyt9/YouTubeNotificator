@@ -18,7 +18,7 @@ namespace YouTubeNotificator.Domain.Sevices
 
                 foreach (var vid in tuple.Item2)
                 {
-                    sb.AppendLine($"    • [{vid.Date.Value.ToShortTimeString()} {vid.Date.Value.ToShortDateString()}] <a href='{vid.Url}'>{vid.Name}</a>");
+                    sb.AppendLine($"    • [{vid.Date.ToShortTimeString()} {vid.Date.ToShortDateString()}] <a href='{vid.Url}'>{vid.Name}</a>");
                 }
 
                 sb.AppendLine();

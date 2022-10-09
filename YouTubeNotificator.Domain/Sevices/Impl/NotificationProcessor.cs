@@ -41,20 +41,24 @@ namespace YouTubeNotificator.Domain.Sevices.Impl
 
             foreach (var channel in channels)
             {
-                var dbVideoLast = await _appRepository.GetVideoLast(channel.Id);
-                var ytVideos = await _youTubeService.GetChannelVideos(
-                    channel.YoutubeId, dbVideoLast.Date.Value);
+                var dbVideoLast = await _appRepository.GetLastVideo(channel.Id);
+                var lastDate = dbVideoLast == null
+                    ? new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day)
+                    : dbVideoLast.Date + TimeSpan.FromSeconds(1);
+                var videos = await _youTubeService.GetChannelVideos(
+                    channel.YoutubeId, lastDate);
                 var tuple = new Tuple<UserChannel, ICollection<ChannelVideo>>(
                     channel, new List<ChannelVideo>());
 
-                foreach (var videoDto in ytVideos)
+                foreach (var videoDto in videos)
                 {
                     var video = new ChannelVideo()
                     {
                         Id = Guid.NewGuid(),
                         Name = videoDto.Name,
                         Url = videoDto.Url,
-                        Date = videoDto.Date
+                        Date = videoDto.Date.Value,
+                        ChannelId = channel.Id
                     };
                     tuple.Item2.Add(video);
                     await _appRepository.AddVideo(video);

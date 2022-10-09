@@ -42,9 +42,17 @@ namespace YouTubeNotificator.Domain.Commands.Handlers
                 return;
             }
 
-            //_appRepository.GetChannels()
+            var chan = await _appRepository.GetChannelByUrl(user.Id, request.ChannelUrl);
+            if (chan == null)
+            {
+                await _telegramBot.SendMessage(request.Context.TelegramChannelId, "channel not found");
+                return;
+            }
 
-            throw new NotImplementedException();
+            await _appRepository.DelChannel(chan);
+            await _appRepository.Commit();
+
+            await _telegramBot.SendMessage(request.Context.TelegramChannelId, "channel has been deleted");
         }
 
     }

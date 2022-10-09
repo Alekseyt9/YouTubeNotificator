@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Quartz.Impl.Matchers;
 using YouTubeNotificator.Domain.Entities;
 using YouTubeNotificator.Domain.Sevices;
 
@@ -13,7 +14,7 @@ namespace YouTubeNotificator.Persistence.Services
             _dbContext = dbContext ?? throw new ArgumentNullException("dbContext");
         }
 
-        public async Task<ICollection<User>> GetUsers()
+        public async Task<IList<User>> GetUsers()
         {
             return await _dbContext.Users.ToListAsync<User>();
         }
@@ -21,6 +22,11 @@ namespace YouTubeNotificator.Persistence.Services
         public async Task<User> GetUserByTelegramId(long id)
         {
             return await _dbContext.Users.SingleOrDefaultAsync(u => u.TelegramId == id);
+        }
+
+        public async Task<User> GetUserById(Guid userId)
+        {
+            return await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == userId);
         }
 
         public async Task AddUser(User user)
@@ -35,14 +41,16 @@ namespace YouTubeNotificator.Persistence.Services
                 .ToListAsync<UserChannel>();
         }
 
-        public Task<UserChannel> GetChannel(Guid userId, string url)
+        public async Task<UserChannel> GetChannelByUrl(Guid userId, string url)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Channels
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.YoutubeUrl == url);
         }
 
-        public Task DelChannel(Guid userId, Guid id)
+        public Task DelChannel(UserChannel channel)
         {
-            throw new NotImplementedException();
+            _dbContext.Channels.Remove(channel);
+            return Task.CompletedTask;
         }
 
         public async Task<ICollection<ChannelVideo>> GetVideos(Guid chanId)
@@ -51,7 +59,7 @@ namespace YouTubeNotificator.Persistence.Services
                 .Where(x => x.ChannelId == chanId).ToListAsync();
         }
 
-        public async Task<ChannelVideo> GetVideoLast(Guid chanId)
+        public async Task<ChannelVideo> GetLastVideo(Guid chanId)
         {
             return await _dbContext.Videos
                 .Where(x => x.ChannelId == chanId)
@@ -61,11 +69,6 @@ namespace YouTubeNotificator.Persistence.Services
         public async Task AddChannel(UserChannel chan)
         {
             await _dbContext.Channels.AddAsync(chan, CancellationToken.None);
-        }
-
-        public Task<User> GetUserById(Guid userId)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task AddVideo(ChannelVideo vid)

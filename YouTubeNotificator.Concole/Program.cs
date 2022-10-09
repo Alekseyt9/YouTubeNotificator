@@ -73,7 +73,10 @@ namespace YouTubeNotificator.Concole
                         .AddSingleton<IYouTubeService, YouTubeServiceImpl>()
                         .RegisterDomain()
                         .RegisterPersistence(configuration)
-                        .AddQuartz()
+                        .AddQuartz(q =>
+                        {
+                            q.UseMicrosoftDependencyInjectionJobFactory();
+                        })
 
                 );
         }

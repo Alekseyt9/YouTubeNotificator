@@ -12,13 +12,13 @@ namespace YouTubeNotificator.Domain.Sevices
 
         Task<ICollection<UserChannel>> GetChannels(Guid userId);
 
-        Task<UserChannel> GetChannel(Guid userId, string url);
+        Task<UserChannel> GetChannelByUrl(Guid userId, string url);
 
-        Task DelChannel(Guid userId, Guid id);
+        Task DelChannel(UserChannel channel);
 
         Task<ICollection<ChannelVideo>> GetVideos(Guid chanId);
 
-        Task<ChannelVideo> GetVideoLast(Guid chanId);
+        Task<ChannelVideo> GetLastVideo(Guid chanId);
 
         Task AddVideo(ChannelVideo vid);
 
@@ -27,5 +27,7 @@ namespace YouTubeNotificator.Domain.Sevices
         Task AddChannel(UserChannel chan);
 
         Task<User> GetUserById(Guid userId);
+
+        Task<IList<User>> GetUsers();
     }
 }

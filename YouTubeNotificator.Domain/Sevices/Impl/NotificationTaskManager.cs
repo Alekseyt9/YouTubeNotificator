@@ -18,7 +18,7 @@ namespace YouTubeNotificator.Domain.Sevices
             IAppRepository appRepository)
         {
             _schedulerFactory = schedulerFactory ?? throw new ArgumentNullException(nameof(schedulerFactory));
-            //_appRepository = appRepository ?? throw new ArgumentNullException(nameof(appRepository));
+            _appRepository = appRepository ?? throw new ArgumentNullException(nameof(appRepository));
         }
 
         public async Task Start()
@@ -26,13 +26,13 @@ namespace YouTubeNotificator.Domain.Sevices
             _scheduler = await _schedulerFactory.GetScheduler();
             await _scheduler.Start();
 
-            /*
+            
             var users = await _appRepository.GetUsers();
             foreach (var user in users)
             {
                 await CreateUserTask(user);
             }
-            */
+            
         }
 
         private async Task CreateUserTask(User user)
@@ -46,7 +46,8 @@ namespace YouTubeNotificator.Domain.Sevices
                 .WithIdentity(user.Id.ToString(), s_NotificationsGroup)
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(60 * 60)
+                    .WithIntervalInSeconds(60 * 10)
+                    //.WithIntervalInSeconds(5)
                     .RepeatForever())
                 .Build();
 
