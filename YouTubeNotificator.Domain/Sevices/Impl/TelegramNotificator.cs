@@ -28,7 +28,7 @@ namespace YouTubeNotificator.Domain.Sevices
             foreach (var tuple in data.Data)
             {
                 var chan = tuple.Item1;
-                sb.AppendLine($"<b>{chan.Name}</b>");
+                sb.AppendLine($"<b>{chan.YoutubeName}</b>");
 
                 foreach (var vid in tuple.Item2)
                 {

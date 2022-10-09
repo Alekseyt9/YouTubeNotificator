@@ -8,8 +8,14 @@ namespace YouTubeNotificator.Persistence.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            builder.Property<Guid>(x => x.Id);
             builder.HasKey(x => x.Id);
-            builder.HasMany(x => x.Channels);
+            //builder.HasMany(x => x.Channels);
+
+            builder.Property(x => x.TelegramId).IsRequired();
+            builder.HasIndex(x => x.TelegramId).IsUnique();
+
+            builder.ToTable("Users");
         }
     }
 }

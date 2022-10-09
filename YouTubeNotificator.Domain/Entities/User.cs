@@ -4,9 +4,8 @@
     {
         public Guid Id { get; set; }
 
-        public string Name { get; set; }
+        public long TelegramId { get; set; }
 
         public ICollection<UserChannel> Channels { get; set; }
-
     }
 }

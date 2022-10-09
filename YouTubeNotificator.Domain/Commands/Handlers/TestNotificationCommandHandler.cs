@@ -20,7 +20,7 @@ namespace YouTubeNotificator.Domain.Commands.Handlers
         {
             var userChannel = new UserChannel()
             {
-                Name = "NERVOZ"
+                YoutubeName = "NERVOZ"
             };
             var vid1 = new ChannelVideo()
             {

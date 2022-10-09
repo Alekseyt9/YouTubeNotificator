@@ -4,12 +4,16 @@
     {
         public Guid Id { get; set; }
 
-        public string Name { get; set; }
+        public string YoutubeName { get; set; }
 
         public string YoutubeId { get; set; }
 
+        public string YoutubeUrl { get; set; }
+
         public Guid UserId { get; set; }
 
-        //public ICollection<ChannelVideo> Videos { get; set; }
+        public User User { get; set; }
+
+        public ICollection<ChannelVideo> Videos { get; set; }
     }
 }

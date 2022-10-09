@@ -8,6 +8,7 @@ using YouTubeNotificator.Domain.Commands;
 using YouTubeNotificator.Domain.Sevices;
 using YouTubeNotificator.Domain.Sevices.Impl;
 using YouTubeNotificator.Domain.Sevices.Implementation;
+using YouTubeNotificator.Persistence.Services;
 
 namespace YouTubeNotificator.Concole
 {
@@ -16,14 +17,21 @@ namespace YouTubeNotificator.Concole
         static async Task Main(string[] args)
         {
             using var host = CreateHostBuilder(args).Build();
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                DBInitializer.Init(ctx);
+            }
             Start(host);
+
             await host.RunAsync();
         }
 
         static void Start(IHost host)
         {
-            //var taskManager = host.Services.GetRequiredService<INotificationTaskManager>();
-            //taskManager.Start();
+            var taskManager = host.Services.GetRequiredService<INotificationTaskManager>();
+            taskManager.Start();
 
             var bot = host.Services.GetRequiredService<ITelegramBot>();
             bot.ReceiveMessage += (sender, args) =>
@@ -49,7 +57,8 @@ namespace YouTubeNotificator.Concole
         static IHostBuilder CreateHostBuilder(string[] args)
         {
             var builder = new ConfigurationBuilder()
-                .AddUserSecrets<Program>();
+                .AddUserSecrets<Program>()
+                .AddJsonFile($"appsettings.json", true, true); ;
             var configuration = builder.Build();
 
             return Host.CreateDefaultBuilder(args)
@@ -62,8 +71,9 @@ namespace YouTubeNotificator.Concole
                         .AddSingleton<IConfiguration>(configuration)
                         .AddSingleton<INotificationTaskManager, NotificationTaskManager>()
                         .RegisterDomain()
-                        .RegisterPersistence()
+                        .RegisterPersistence(configuration)
                         .AddQuartz()
+
                 );
         }
     }
