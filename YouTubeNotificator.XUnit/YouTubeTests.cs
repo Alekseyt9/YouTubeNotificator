@@ -21,7 +21,7 @@ namespace YouTubeNotificator.XUnit
         [Fact]
         public async Task GetChannelIdTest()
         {
-            IYouTubeService ytServ = new YouTubeServiceImpl();
+            IYouTubeService ytServ = new YouTubeServiceImpl(Configuration);
             var result = await ytServ.GetChannelId("https://www.youtube.com/c/NERVOZZ");
             Assert.Equal(result, "UCvK4azuNYmcJzngT38yPsdw");
         }
@@ -38,7 +38,7 @@ namespace YouTubeNotificator.XUnit
                 ApplicationName = appName
             });
 
-            IYouTubeService ytServ = new YouTubeServiceImpl();
+            IYouTubeService ytServ = new YouTubeServiceImpl(Configuration);
             var chanId = await ytServ.GetChannelId("https://www.youtube.com/c/NERVOZZ");
 
             var searchVideosRequest = youtubeService.Search.List(

@@ -21,7 +21,8 @@ namespace YouTubeNotificator.Concole
             using (var scope = host.Services.CreateScope())
             {
                 var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                DBInitializer.Init(ctx);
+                var ytServ = scope.ServiceProvider.GetRequiredService<IYouTubeService>();
+                await DBInitializer.Init(ctx, ytServ);
             }
             await Start(host);
 

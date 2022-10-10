@@ -8,6 +8,8 @@
 
         public string YoutubeId { get; set; }
 
+        public string? PlaylistId { get; set; }
+
         public string YoutubeUrl { get; set; }
 
         public Guid UserId { get; set; }

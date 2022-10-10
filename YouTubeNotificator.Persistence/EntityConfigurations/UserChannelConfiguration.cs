@@ -17,6 +17,7 @@ namespace YouTubeNotificator.Persistence.EntityConfigurations
             builder.Property(x => x.YoutubeId).IsRequired().HasMaxLength(100);
             builder.Property(x => x.YoutubeName).IsRequired().HasMaxLength(500);
             builder.Property(x => x.YoutubeUrl).IsRequired().HasMaxLength(500);
+            builder.Property(x => x.PlaylistId).HasMaxLength(100);
 
             builder.HasOne(x => x.User)
                 .WithMany(x => x.Channels)

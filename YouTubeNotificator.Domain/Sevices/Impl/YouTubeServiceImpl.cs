@@ -20,7 +20,33 @@ namespace YouTubeNotificator.Domain.Sevices
             });
         }
 
-        public async Task<ICollection<YouTubeVideoDto>> GetChannelVideos(string channelId, DateTime timeFrom)
+        public async Task<ICollection<YouTubeVideoDto>> GetChannelVideos(
+            string playlistId, DateTime dateFrom)
+        {
+            var playlistRequest = _service.PlaylistItems.List(
+                new Google.Apis.Util.Repeatable<string>(
+                    new string[] { "snippet" }
+                ));
+            playlistRequest.PlaylistId = playlistId;
+            playlistRequest.MaxResults = 50;
+            var response = await playlistRequest.ExecuteAsync();
+
+            var res = new List<YouTubeVideoDto>();
+            foreach (var item in response.Items.Where(x => x.Snippet.PublishedAt > dateFrom))
+            {
+                res.Add(new YouTubeVideoDto()
+                {
+                    Name = item.Snippet.Title,
+                    Url = "https://www.youtube.com/watch?v=" + item.Snippet.ResourceId.VideoId,
+                    Date = item.Snippet.PublishedAt
+                });
+            }
+
+            return res;
+        }
+
+        [Obsolete]
+        public async Task<ICollection<YouTubeVideoDto>> GetChannelVideosOld(string channelId, DateTime timeFrom)
         {
             var searchVideosRequest = _service.Search.List(
                 new Google.Apis.Util.Repeatable<string>(
@@ -45,7 +71,7 @@ namespace YouTubeNotificator.Domain.Sevices
             return res;
         }
 
-        public async Task<string> GetChannelTitle(string channelId)
+        public async Task<YtChannelInfo> GetChannelInfo(string channelId)
         {
             var request = _service.Channels.List(
                 new Google.Apis.Util.Repeatable<string>(
@@ -54,7 +80,13 @@ namespace YouTubeNotificator.Domain.Sevices
 
             request.Id = channelId;
             var response = await request.ExecuteAsync();
-            return response.Items.First().Snippet.Title;
+
+            var firstChan = response.Items.First();
+            return new YtChannelInfo()
+            {
+                Title = firstChan.Snippet.Title,
+                PlaylistId = firstChan.ContentDetails.RelatedPlaylists.Uploads
+            };
         }
 
         public async Task<string> GetChannelId(string url)

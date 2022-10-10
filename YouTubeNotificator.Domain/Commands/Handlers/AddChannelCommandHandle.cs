@@ -50,7 +50,7 @@ namespace YouTubeNotificator.Domain.Commands.Handlers
             try
             {
                 var channelId = await _youTubeService.GetChannelId(request.ChannelUrl);
-                var title = await _youTubeService.GetChannelTitle(channelId);
+                var channelInfo = await _youTubeService.GetChannelInfo(channelId);
 
                 var chan = new UserChannel()
                 {
@@ -58,13 +58,14 @@ namespace YouTubeNotificator.Domain.Commands.Handlers
                     Id = Guid.NewGuid(),
                     User = user,
                     YoutubeId = channelId,
-                    YoutubeName = title,
-                    YoutubeUrl = request.ChannelUrl
+                    YoutubeName = channelInfo.Title,
+                    YoutubeUrl = request.ChannelUrl,
+                    PlaylistId = channelInfo.PlaylistId
                 };
                 await _appRepository.AddChannel(chan);
                 await _appRepository.Commit();
 
-                await _telegramBot.SendMessage(request.Context.TelegramChannelId, $"chanel added: {title}");
+                await _telegramBot.SendMessage(request.Context.TelegramChannelId, $"chanel added: {channelInfo.Title}");
             }
             catch (Exception e)
             {

@@ -1,5 +1,4 @@
-﻿using YouTubeNotificator.Domain.Entities;
-using YouTubeNotificator.Domain.Model;
+﻿using YouTubeNotificator.Domain.Model;
 
 namespace YouTubeNotificator.Domain.Sevices;
 
@@ -10,6 +9,6 @@ public interface IYouTubeService
 
     Task<string> GetChannelId(string url);
 
-    Task<string> GetChannelTitle(string channelId);
+    Task<YtChannelInfo> GetChannelInfo(string channelId);
 
 }

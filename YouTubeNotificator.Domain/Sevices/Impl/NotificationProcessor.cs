@@ -46,7 +46,7 @@ namespace YouTubeNotificator.Domain.Sevices.Impl
                     ? new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day)
                     : dbVideoLast.Date + TimeSpan.FromSeconds(1);
                 var videos = await _youTubeService.GetChannelVideos(
-                    channel.YoutubeId, lastDate);
+                    channel.PlaylistId, lastDate);
                 var tuple = new Tuple<UserChannel, ICollection<ChannelVideo>>(
                     channel, new List<ChannelVideo>());
 

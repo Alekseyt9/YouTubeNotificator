@@ -1,9 +1,5 @@
 using Microsoft.Extensions.Configuration;
-using System.Runtime;
 using Xunit;
-using YouTubeNotificator.Domain.Entities;
-using YouTubeNotificator.Domain.Model;
-using YouTubeNotificator.Domain.Sevices;
 
 namespace YouTubeNotificator.XUnit
 {

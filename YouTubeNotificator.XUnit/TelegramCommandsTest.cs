@@ -18,7 +18,7 @@ namespace YouTubeNotificator.XUnit
             var cmdInfo = parser.Parse("/start");
             Assert.Equal(cmdInfo.Kind, TelegramCommandKind.Start);
             var cmd = (TelegramCommandBase)factory.Create(cmdInfo);
-            cmd.Context = new TelegramBotContext() { TelegramChannelId = "" };
+            cmd.Context = new TelegramBotContext() { TelegramChannelId = 0 };
         }
     }
 }

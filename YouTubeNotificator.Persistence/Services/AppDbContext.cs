@@ -12,10 +12,9 @@ namespace YouTubeNotificator.Persistence.Services
 
         public DbSet<ChannelVideo> Videos { get; set; }
 
-
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-
+          
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
