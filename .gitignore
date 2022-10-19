@@ -19,3 +19,8 @@
 /YouTubeNotificator.WebAPI/bin/Debug/net6.0
 /YouTubeNotificator.Persistence/bin/Debug/net6.0
 /YouTubeNotificator.Concole/bin/Debug/net6.0
+/YouTubeNotificator.ApiTest/bin/Debug/net6.0
+/YouTubeNotificator.ApiTest/obj
+/YouTubeNotificator.ApiTest/.vs/YouTubeApiTest/v17
+/YouTubeNotificator.ApiTest/.vs/YouTubeApiTest/FileContentIndex
+/YouTubeNotificator.ApiTest/.vs/YouTubeApiTest/DesignTimeBuild

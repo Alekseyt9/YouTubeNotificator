@@ -46,8 +46,7 @@ namespace YouTubeNotificator.Domain.Sevices
                 .WithIdentity(user.Id.ToString(), s_NotificationsGroup)
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(60 * 10)
-                    //.WithIntervalInSeconds(5)
+                    .WithIntervalInMinutes(30)
                     .RepeatForever())
                 .Build();
 

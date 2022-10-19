@@ -33,8 +33,8 @@ namespace YouTubeApiTest
             
             var youtubeService = new YouTubeService(new BaseClientService.Initializer()
             {
-                ApiKey = "AIzaSyDrdskvPeKSIxj7iEDO6n6hkkFISAQN2oA",
-                ApplicationName = "YoutubeNotificationBot"
+                ApiKey = "",
+                ApplicationName = ""
             });
 
             /*
