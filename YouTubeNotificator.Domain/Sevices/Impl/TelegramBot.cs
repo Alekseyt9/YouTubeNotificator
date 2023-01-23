@@ -1,10 +1,12 @@
 ﻿
+using System.Xml;
 using Microsoft.Extensions.Configuration;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot;
 using YouTubeNotificator.Domain.Model;
 using Telegram.Bot.Types;
+using YouTubeNotificator.Domain.Helpers;
 
 namespace YouTubeNotificator.Domain.Sevices.Impl
 {
@@ -56,13 +58,17 @@ namespace YouTubeNotificator.Domain.Sevices.Impl
             }
         }
 
-
         public async Task SendMessage(long channelId, string msg)
         {
             using var cts = new CancellationTokenSource();
-            var sentMessage = await _botClient.SendTextMessageAsync(
-                channelId, msg, cancellationToken: cts.Token, 
-                parseMode: ParseMode.Html, disableWebPagePreview:true);
+
+            var msgArr = StringUtils.SplitString(msg, 4096);  //4096
+            foreach (var m in msgArr)
+            {
+                var sentMessage = await _botClient.SendTextMessageAsync(
+                    channelId, m, cancellationToken: cts.Token,
+                    parseMode: ParseMode.Html, disableWebPagePreview: true);
+            }
         }
 
     }

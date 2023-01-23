@@ -1,23 +1,14 @@
 ﻿
-using Microsoft.Extensions.Configuration;
+
 using Xunit;
-using YouTubeNotificator.Domain.Sevices.Impl;
+using YouTubeNotificator.Domain.Helpers;
 
 namespace YouTubeNotificator.XUnit
 {
-    public class TelegramTests
+    public class StringUtilTest
     {
-        IConfiguration Configuration { get; set; }
-
-        public TelegramTests()
-        {
-            var builder = new ConfigurationBuilder()
-                .AddUserSecrets<TelegramTests>();
-            Configuration = builder.Build();
-        }
-
         [Fact]
-        public async void SendBigMessage()
+        public void SplitStringTest()
         {
             var msg = @"
 <b>Максим Кац</b>
@@ -109,50 +100,9 @@ namespace YouTubeNotificator.XUnit
     • [20:21 19.01.2023] <a href='https://www.youtube.com/watch?v=UC41k7hshI4'>Мобилизации не случилось и 18 января, как многие предвещали. Почему? Чего ждать?</a>
 ";
 
-            var telBot = new TelegramBot(Configuration);
-            var chanId = long.Parse(Configuration["telegram_test_chan_id"]);
-            await telBot.SendMessage(chanId, msg);
+            var res = StringUtils.SplitString(msg, 4096);
         }
 
-        [Fact]
-        public void TestCreateTelegramBot()
-        {
-            try
-            {
-                //ITelegramBot telServ = new TelegramBot(Configuration);
-                Assert.True(true);
-            }
-            catch (Exception e)
-            {
-                Assert.True(false, e.Message);
-            }
-        }
-
-        /*
-        public void TestSend()
-        {
-            INotificator telServ = new TelegramNotificator(Configuration);
-
-            var notInfo = new NotificationData();
-            var channel = new UserChannel();
-            var videos = new List<ChannelVideo>
-            {
-                new ChannelVideo()
-            };
-            notInfo.Data.Add(
-                new Tuple<UserChannel, ICollection<ChannelVideo>>(channel, videos));
-
-            try
-            {
-                telServ.SendNotification(notInfo);
-                Assert.True(true);
-            }
-            catch (Exception e)
-            {
-                Assert.True(false, e.Message);
-            }
-        }
-        */
 
     }
 }
