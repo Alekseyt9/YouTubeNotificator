@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿
+using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,7 +9,6 @@ using YouTubeNotificator.Domain.Commands;
 using YouTubeNotificator.Domain.Sevices;
 using YouTubeNotificator.Domain.Sevices.Impl;
 using YouTubeNotificator.Domain.Sevices.Implementation;
-using YouTubeNotificator.Persistence.Services;
 
 namespace YouTubeNotificator.Concole
 {
@@ -18,18 +18,15 @@ namespace YouTubeNotificator.Concole
         {
             using var host = CreateHostBuilder(args).Build();
 
-            using (var scope = host.Services.CreateScope())
+            if (Environment.UserInteractive)
             {
-                var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                var ytServ = scope.ServiceProvider.GetRequiredService<IYouTubeService>();
-                await DBInitializer.Init(ctx, ytServ);
+                await StartInCons(host);
             }
-            await Start(host);
 
             await host.RunAsync();
         }
 
-        static async Task Start(IHost host)
+        static async Task StartInCons(IHost host)
         {
             var taskManager = host.Services.GetRequiredService<INotificationTaskManager>();
             await taskManager.Start();
@@ -57,29 +54,38 @@ namespace YouTubeNotificator.Concole
 
         static IHostBuilder CreateHostBuilder(string[] args)
         {
+            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+
             var builder = new ConfigurationBuilder()
-                .AddUserSecrets<Program>()
-                .AddJsonFile($"appsettings.json", true, true); ;
+                //.AddUserSecrets<Program>()
+                .AddJsonFile($"appsettings.json", false, true)
+                .AddJsonFile("secrets.json", false, true);
+            
             var configuration = builder.Build();
 
             return Host.CreateDefaultBuilder(args)
+                .UseWindowsService(options => { options.ServiceName = "YouTubeNotificator_Service"; })
                 .ConfigureServices((_, services) =>
+                {
                     services
                         .AddTransient<INotificationFormatter, TelegramNotificationFormatter>()
                         .AddTransient<INotificationTaskManager, NotificationTaskManager>()
                         .AddTransient<ITelegramCommandFactory, TelegramCommandFactory>()
                         .AddTransient<ITelegramCommandParser, TelegramCommandParser>()
                         .AddSingleton<IConfiguration>(configuration)
-                        .AddSingleton<INotificationTaskManager, NotificationTaskManager>()
+                        .AddScoped<INotificationTaskManager, NotificationTaskManager>()
                         .AddSingleton<IYouTubeService, YouTubeServiceImpl>()
                         .RegisterDomain()
                         .RegisterPersistence(configuration)
-                        .AddQuartz(q =>
-                        {
-                            q.UseMicrosoftDependencyInjectionJobFactory();
-                        })
+                        .AddQuartz(q => { q.UseMicrosoftDependencyInjectionJobFactory(); });
 
-                );
+                    if (!Environment.UserInteractive)
+                    {
+                        services.AddHostedService<Worker>();
+                    }
+
+                });
         }
+
     }
 }

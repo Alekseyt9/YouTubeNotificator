@@ -13,7 +13,7 @@ namespace YouTubeNotificator.Domain
         {
             var connStr = conf["DbConnection"];
 
-            services.AddSingleton<IAppRepository, AppRepository>();
+            services.AddScoped<IAppRepository, AppRepository>();
             services.AddDbContext<AppDbContext>(opt =>
             {
                 opt.UseSqlite(connStr);

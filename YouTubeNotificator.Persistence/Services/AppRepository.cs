@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Quartz.Impl.Matchers;
+﻿
+using Microsoft.EntityFrameworkCore;
 using YouTubeNotificator.Domain.Entities;
 using YouTubeNotificator.Domain.Sevices;
 
