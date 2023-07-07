@@ -1,5 +1,4 @@
 ﻿
-using System.Xml;
 using Microsoft.Extensions.Configuration;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types.Enums;
@@ -13,8 +12,7 @@ namespace YouTubeNotificator.Domain.Sevices.Impl
     internal class TelegramBot : ITelegramBot
     {
         public event EventHandler<TelegramMessageEventArgs>? ReceiveMessage;
-
-        TelegramBotClient _botClient;
+        readonly TelegramBotClient _botClient;
 
         public TelegramBot(IConfiguration config)
         {
