@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{2188C839-C030-41FC-BB48-9BEC6C46582C}"
-	ProjectSection(SolutionItems) = preProject
-		YouTubeNotificator.Console\YouTubeNotificator.Console.csproj = YouTubeNotificator.Console\YouTubeNotificator.Console.csproj
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{659501AF-EC98-404D-91CE-AACC3FFA0797}"
 EndProject
@@ -21,6 +18,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D2A99BBE-6770-4BD3-8954-B88221611923}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouTubeNotificator.XUnit", "YouTubeNotificator.XUnit\YouTubeNotificator.XUnit.csproj", "{CE5293F0-9E62-48A7-8C27-1E18149D49E4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouTubeNotificator.Console", "YouTubeNotificator.Console\YouTubeNotificator.Console.csproj", "{A9CFCF9D-EBBA-4579-8302-BECEB14290B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +39,10 @@ Global
 		{CE5293F0-9E62-48A7-8C27-1E18149D49E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE5293F0-9E62-48A7-8C27-1E18149D49E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE5293F0-9E62-48A7-8C27-1E18149D49E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9CFCF9D-EBBA-4579-8302-BECEB14290B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9CFCF9D-EBBA-4579-8302-BECEB14290B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9CFCF9D-EBBA-4579-8302-BECEB14290B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9CFCF9D-EBBA-4579-8302-BECEB14290B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +55,7 @@ Global
 		{7B386006-8D5E-40B8-BE56-1D6DF79CED90} = {659501AF-EC98-404D-91CE-AACC3FFA0797}
 		{D2A99BBE-6770-4BD3-8954-B88221611923} = {55F27A93-4854-4710-AD75-CB50FAFA5345}
 		{CE5293F0-9E62-48A7-8C27-1E18149D49E4} = {D2A99BBE-6770-4BD3-8954-B88221611923}
+		{A9CFCF9D-EBBA-4579-8302-BECEB14290B7} = {2188C839-C030-41FC-BB48-9BEC6C46582C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {41171B8F-AA1E-4D86-8291-45E1145837A2}
